@@ -206,7 +206,7 @@ struct ContentView: View {
                         .foregroundColor(.secondary)
                     Text("Atoms")
                     Spacer()
-                    Text(analysis.atoms.joined(separator: " → "))
+                    Text(formatAtomStructure(analysis.atoms))
                         .foregroundColor(.secondary)
                         .lineLimit(1)
                         .truncationMode(.middle)
@@ -221,6 +221,61 @@ struct ContentView: View {
         let formatter = ByteCountFormatter()
         formatter.countStyle = .file
         return formatter.string(fromByteCount: Int64(bytes))
+    }
+
+    /// Formats atom structure with compression for repeated patterns
+    /// e.g., ["ftyp", "moov", "moof", "mdat", "moof", "mdat"] → "ftyp → moov → (moof → mdat) ×2"
+    private func formatAtomStructure(_ atoms: [String]) -> String {
+        guard !atoms.isEmpty else { return "" }
+
+        var result: [String] = []
+        var i = 0
+
+        while i < atoms.count {
+            // Try to find repeating patterns of length 1, 2, 3, etc.
+            var foundPattern = false
+
+            // Check for patterns of length 2 (most common: moof → mdat)
+            if i + 1 < atoms.count {
+                let pattern = [atoms[i], atoms[i + 1]]
+                var repeatCount = 1
+                var j = i + 2
+
+                while j + 1 < atoms.count && atoms[j] == pattern[0] && atoms[j + 1] == pattern[1] {
+                    repeatCount += 1
+                    j += 2
+                }
+
+                if repeatCount >= 2 {
+                    result.append("(\(pattern.joined(separator: " → "))) ×\(repeatCount)")
+                    i = j
+                    foundPattern = true
+                }
+            }
+
+            // Check for single atom repetition
+            if !foundPattern && i < atoms.count {
+                let atom = atoms[i]
+                var repeatCount = 1
+                var j = i + 1
+
+                while j < atoms.count && atoms[j] == atom {
+                    repeatCount += 1
+                    j += 1
+                }
+
+                if repeatCount >= 3 {
+                    result.append("\(atom) ×\(repeatCount)")
+                    i = j
+                    foundPattern = true
+                } else {
+                    result.append(atom)
+                    i += 1
+                }
+            }
+        }
+
+        return result.joined(separator: " → ")
     }
 
     // MARK: - Computed Properties
@@ -401,9 +456,15 @@ struct ContentView: View {
                 do {
                     try FastStartConverter.convert(input: inputURL, output: outputURL)
 
+                    // Re-analyze the converted file to show updated status
+                    let newAnalysis = try MP4Parser.analyze(url: outputURL)
+
                     await MainActor.run {
                         self.processingState = .success
                         self.resultMessage = String(localized: "result_saved \(outputURL.lastPathComponent)")
+                        self.analysis = newAnalysis
+                        self.fileName = outputURL.lastPathComponent
+                        self.filePath = outputURL.deletingLastPathComponent().path
                     }
                 } catch {
                     await MainActor.run {

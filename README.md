@@ -43,7 +43,7 @@ MP4 and QuickTime files contain a "moov" atom that stores metadata (codec info, 
    git clone https://github.com/kyungw00k/quickmoov.git
    ```
 
-2. Open `MoovIt.xcodeproj` in Xcode
+2. Open `QuickMoov.xcodeproj` in Xcode
 
 3. Build and run (⌘R)
 

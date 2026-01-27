@@ -790,25 +790,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Moov Complete!"
+            "value" : "Optimization Complete!"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Moov 완료!"
+            "value" : "최적화 완료!"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Moov完了！"
+            "value" : "最適化完了！"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Moov 完成！"
+            "value" : "优化完成！"
           }
         }
       }

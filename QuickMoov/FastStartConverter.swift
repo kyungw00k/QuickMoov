@@ -134,7 +134,7 @@ class FastStartConverter {
             try outputHandle.write(contentsOf: moovData)
         }
 
-        // 3. Write mdat (and any atoms after it, excluding free/skip if removing)
+        // 3. Write remaining atoms (excluding ftyp, moov which are already written)
         for atom in atoms {
             // Skip ftyp (already written) and moov (already written)
             if atom.type == "ftyp" || atom.type == "moov" {
@@ -143,11 +143,6 @@ class FastStartConverter {
 
             // Skip free/skip atoms if removing
             if options.removeFreeAtoms && (atom.type == "free" || atom.type == "skip") {
-                continue
-            }
-
-            // Skip atoms before mdat if moov was moved (they're typically free atoms)
-            if needsMoovMove && atom.offset < mdatAtom.offset {
                 continue
             }
 

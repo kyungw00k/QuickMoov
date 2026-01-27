@@ -1,5 +1,5 @@
 import XCTest
-@testable import MoovIt
+@testable import QuickMoov
 
 final class MP4ParserTests: XCTestCase {
 

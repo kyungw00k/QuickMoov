@@ -1,5 +1,5 @@
 import XCTest
-@testable import MoovIt
+@testable import QuickMoov
 
 final class FastStartConverterTests: XCTestCase {
 
@@ -14,7 +14,7 @@ final class FastStartConverterTests: XCTestCase {
 
         // Create temp directory for output files
         tempDirectory = FileManager.default.temporaryDirectory
-            .appendingPathComponent("MoovItTests-\(UUID().uuidString)")
+            .appendingPathComponent("QuickMoovTests-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: tempDirectory, withIntermediateDirectories: true)
     }
 
@@ -95,8 +95,9 @@ final class FastStartConverterTests: XCTestCase {
         let inputURL = testFilesURL.appendingPathComponent("test_optimized.mp4")
         let outputURL = tempDirectory.appendingPathComponent("should_not_exist.mp4")
 
-        XCTAssertThrowsError(try FastStartConverter.convert(input: inputURL, output: outputURL)) { error in
-            // Should throw invalidAtomStructure because moov is already before mdat
+        // Use fastStartOnly option to test that already fast-start file throws error
+        XCTAssertThrowsError(try FastStartConverter.convert(input: inputURL, output: outputURL, options: .fastStartOnly)) { error in
+            // Should throw nothingToOptimize because moov is already before mdat
         }
     }
 
