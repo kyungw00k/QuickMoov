@@ -1,0 +1,4 @@
+"01_idle" = "QuickMoov";
+"02_needs_conversion" = "최적화 필요";
+"03_already_optimized" = "이미 최적화됨";
+"04_optimization_complete" = "최적화 완료";

@@ -1,0 +1,4 @@
+"01_idle" = "拖放即可优化";
+"02_needs_conversion" = "即时文件分析";
+"03_already_optimized" = "流媒体就绪";
+"04_optimization_complete" = "Fast-start已启用";

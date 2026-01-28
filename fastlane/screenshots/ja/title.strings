@@ -1,0 +1,4 @@
+"01_idle" = "ドラッグ＆ドロップで最適化";
+"02_needs_conversion" = "即座にファイル分析";
+"03_already_optimized" = "ストリーミング準備完了";
+"04_optimization_complete" = "Fast-start有効";

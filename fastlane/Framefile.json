@@ -1,0 +1,31 @@
+{
+  "device_frame_version": "latest",
+  "default": {
+    "keyword": {
+      "color": "#333333",
+      "font_size": 64
+    },
+    "title": {
+      "color": "#666666",
+      "font_size": 32
+    },
+    "background": "#FFFFFF",
+    "padding": 50,
+    "show_complete_frame": true,
+    "stack_title": false
+  },
+  "data": [
+    {
+      "filter": "01_idle"
+    },
+    {
+      "filter": "02_needs_conversion"
+    },
+    {
+      "filter": "03_already_optimized"
+    },
+    {
+      "filter": "04_optimization_complete"
+    }
+  ]
+}

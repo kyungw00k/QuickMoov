@@ -1,0 +1,4 @@
+"01_idle" = "QuickMoov";
+"02_needs_conversion" = "Needs Optimization";
+"03_already_optimized" = "Already Optimized";
+"04_optimization_complete" = "Optimization Complete";

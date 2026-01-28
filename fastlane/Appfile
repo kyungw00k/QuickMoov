@@ -1,0 +1,5 @@
+app_identifier("dev.kyungw00k.quickmoov")
+team_id("3T85GYG827")
+
+# Apple ID는 환경변수로 설정하거나 아래에 직접 입력
+# apple_id("your_apple_id@email.com")

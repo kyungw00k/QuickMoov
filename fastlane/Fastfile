@@ -1,0 +1,56 @@
+default_platform(:mac)
+
+platform :mac do
+  desc "Capture localized screenshots for App Store"
+  lane :screenshots do
+    sh("cd .. && zsh ./Scripts/capture_localized_screenshots.sh")
+  end
+
+  desc "Add device frames to screenshots"
+  lane :frame do
+    frameit(
+      path: "./fastlane/screenshots",
+      white: true,
+      force_device_type: "Mac"
+    )
+  end
+
+  desc "Capture and frame screenshots"
+  lane :screenshots_framed do
+    screenshots
+    frame
+  end
+
+  desc "Upload metadata to App Store Connect"
+  lane :metadata do
+    deliver(
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      force: true
+    )
+  end
+
+  desc "Upload screenshots to App Store Connect"
+  lane :upload_screenshots do
+    deliver(
+      skip_binary_upload: true,
+      skip_metadata: true,
+      force: true
+    )
+  end
+
+  desc "Upload everything (metadata + screenshots)"
+  lane :upload_all do
+    deliver(
+      skip_binary_upload: true,
+      force: true
+    )
+  end
+
+  desc "Full workflow: capture, frame, and upload"
+  lane :release do
+    screenshots
+    frame
+    upload_all
+  end
+end

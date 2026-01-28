@@ -1,0 +1,4 @@
+"01_idle" = "드래그 앤 드롭으로 최적화";
+"02_needs_conversion" = "즉시 파일 분석";
+"03_already_optimized" = "스트리밍 준비 완료";
+"04_optimization_complete" = "Fast-start 활성화";

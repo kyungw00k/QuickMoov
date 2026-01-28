@@ -1,0 +1,4 @@
+"01_idle" = "QuickMoov";
+"02_needs_conversion" = "需要优化";
+"03_already_optimized" = "已优化";
+"04_optimization_complete" = "优化完成";
