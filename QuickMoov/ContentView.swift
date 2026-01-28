@@ -26,6 +26,131 @@ struct ContentView: View {
         case error
     }
 
+    // MARK: - Demo Mode Support
+
+    /// Demo mode scenarios for screenshots
+    enum DemoScenario: String {
+        case needsConversion = "needs-conversion"
+        case alreadyOptimized = "already-optimized"
+        case optimizationComplete = "optimization-complete"
+    }
+
+    init() {
+        // Check for demo mode launch argument
+        if let demoMode = ProcessInfo.processInfo.environment["QUICKMOOV_DEMO"],
+           let scenario = DemoScenario(rawValue: demoMode) {
+            let demoData = Self.demoData(for: scenario)
+            _processingState = State(initialValue: demoData.state)
+            _fileName = State(initialValue: demoData.fileName)
+            _filePath = State(initialValue: demoData.filePath)
+            _fileInfo = State(initialValue: demoData.fileInfo)
+            _analysis = State(initialValue: demoData.analysis)
+            _resultMessage = State(initialValue: demoData.resultMessage)
+        }
+    }
+
+    /// Preview initializer with demo scenario
+    init(demoScenario: DemoScenario) {
+        let data = Self.demoData(for: demoScenario)
+        _processingState = State(initialValue: data.state)
+        _fileName = State(initialValue: data.fileName)
+        _filePath = State(initialValue: data.filePath)
+        _fileInfo = State(initialValue: data.fileInfo)
+        _analysis = State(initialValue: data.analysis)
+        _resultMessage = State(initialValue: data.resultMessage)
+    }
+
+    /// Generate demo data for a given scenario
+    private static func demoData(for scenario: DemoScenario) -> (
+        state: ProcessingState,
+        fileName: String,
+        filePath: String,
+        fileInfo: MP4Info?,
+        analysis: MP4Analysis?,
+        resultMessage: String
+    ) {
+        switch scenario {
+        case .needsConversion:
+            return (
+                state: .needsConversion,
+                fileName: "vacation_video.mp4",
+                filePath: "/Users/Documents/Videos",
+                fileInfo: MP4Info(
+                    fileSize: 125_400_000,
+                    duration: 180,
+                    resolution: CGSize(width: 1920, height: 1080),
+                    videoCodec: "H.264",
+                    audioCodec: "AAC",
+                    videoBitrate: nil,
+                    audioBitrate: nil,
+                    frameRate: 30.0
+                ),
+                analysis: MP4Analysis(
+                    isFastStart: false,
+                    hasFreeAtom: true,
+                    freeAtomSize: 2048,
+                    fileSize: 125_400_000,
+                    moovSize: 500_000,
+                    mdatSize: 124_800_000,
+                    atoms: ["ftyp", "mdat", "moov"]
+                ),
+                resultMessage: String(localized: "result_needs_conversion")
+            )
+        case .alreadyOptimized:
+            return (
+                state: .alreadyOptimized,
+                fileName: "wedding_highlights.mov",
+                filePath: "/Users/Movies",
+                fileInfo: MP4Info(
+                    fileSize: 524_288_000,
+                    duration: 420,
+                    resolution: CGSize(width: 3840, height: 2160),
+                    videoCodec: "H.265 (HEVC)",
+                    audioCodec: "AAC",
+                    videoBitrate: nil,
+                    audioBitrate: nil,
+                    frameRate: 60.0
+                ),
+                analysis: MP4Analysis(
+                    isFastStart: true,
+                    hasFreeAtom: false,
+                    freeAtomSize: 0,
+                    fileSize: 524_288_000,
+                    moovSize: 1_200_000,
+                    mdatSize: 523_000_000,
+                    atoms: ["ftyp", "moov", "mdat"]
+                ),
+                resultMessage: String(localized: "result_already_optimized")
+            )
+        case .optimizationComplete:
+            return (
+                state: .success,
+                fileName: "vacation_video_modified.mp4",
+                filePath: "/Users/Documents/Videos",
+                fileInfo: MP4Info(
+                    fileSize: 125_398_000,
+                    duration: 180,
+                    resolution: CGSize(width: 1920, height: 1080),
+                    videoCodec: "H.264",
+                    audioCodec: "AAC",
+                    videoBitrate: nil,
+                    audioBitrate: nil,
+                    frameRate: 30.0
+                ),
+                analysis: MP4Analysis(
+                    isFastStart: true,
+                    hasFreeAtom: false,
+                    freeAtomSize: 0,
+                    fileSize: 125_398_000,
+                    moovSize: 500_000,
+                    mdatSize: 124_800_000,
+                    atoms: ["ftyp", "moov", "mdat"]
+                ),
+                resultMessage: String(localized: "result_saved vacation_video_modified.mp4")
+            )
+        }
+    }
+
     var body: some View {
         VStack(spacing: 20) {
             // Drop zone
@@ -494,6 +619,20 @@ struct ContentView: View {
     }
 }
 
-#Preview {
+// MARK: - Previews
+
+#Preview("Idle") {
     ContentView()
+}
+
+#Preview("Needs Conversion") {
+    ContentView(demoScenario: .needsConversion)
+}
+
+#Preview("Already Optimized") {
+    ContentView(demoScenario: .alreadyOptimized)
+}
+
+#Preview("Optimization Complete") {
+    ContentView(demoScenario: .optimizationComplete)
 }
